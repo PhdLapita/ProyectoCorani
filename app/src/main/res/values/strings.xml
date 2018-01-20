@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Proyectos Corani</string>
+    <!--Splash activity-->
+    <string name="title_activity_splash">SplashActivity</string>
+    <!--MainActivity-->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_llavero">LlaveroActivity</string>
+    <string name="title_activity_sensores">SensoresActivity</string>
+
+    <!---->
+
+
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_polo"
+            android:icon="@mipmap/polo_icon"
+            android:title="Ropa Inteligente" />
+        <item
+            android:id="@+id/nav_llave"
+            android:icon="@mipmap/keyicon"
+            android:title="Llavero" />
+        <item
+            android:id="@+id/nav_hiladora"
+            android:icon="@mipmap/icon_maquina_hiladora"
+            android:title="Maquina hiladora" />
+        <item
+            android:id="@+id/nav_calidad"
+            android:icon="@mipmap/controldecalidadicono"
+            android:title="Control de calidad" />
+    </group>
+
+</menu>
