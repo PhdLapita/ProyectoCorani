@@ -95,19 +95,19 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_polo) {
-            if (emparejarFragment.isVisible()) {
+            /*if (emparejarFragment.isVisible()) {
                 deleteFragment(emparejarFragment);
             } else {
                 showFragment(emparejarFragment, R.id.fragment_emparejando);
                 saveBoton("1");
-            }
+            }*/
             // Handle the camera action
         } else if (id == R.id.nav_llave) {
             if (emparejarFragment.isVisible()) {
                 deleteFragment(emparejarFragment);
             } else {
                 showFragment(emparejarFragment, R.id.fragment_emparejando);
-                saveBoton("3");
+                saveBoton("2");
             }
         }
          else if (id == R.id.nav_hiladora) {

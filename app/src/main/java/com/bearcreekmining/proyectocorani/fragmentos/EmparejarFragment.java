@@ -138,8 +138,8 @@ public class EmparejarFragment extends BaseFragment{
 
                     if (!(device == null)) {                                                        // Ignore if device is not valid
                         final Intent intent1 = new Intent(getActivity(), SensoresActivity.class);     //Create Intent to start the DeviceControl
-                        //final Intent intent2 = new Intent(getActivity(), DemoActivity.class);     //Create Intent to start the DeviceControl
-                        final Intent intent3 = new Intent(getActivity(), LlaveroActivity.class);     //Create Intent to start the DeviceControl
+                        final Intent intent2 = new Intent(getActivity(), LlaveroActivity.class);     //Create Intent to start the DeviceControl
+                        //final Intent intent3 = new Intent(getActivity(), LlaveroActivity.class);     //Create Intent to start the DeviceControl
                         //intent.putExtra(EXTRAS_DEVICE_NAME, device.getName());        //Add BLE device name to the intent (for info, not needed)
                         //intent.putExtra(EXTRAS_DEVICE_ADDRESS, de vice.getAddress());  //Add BLE device address to the intent
                         sharedpreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -148,12 +148,12 @@ public class EmparejarFragment extends BaseFragment{
                         if(TextUtils.equals(activity,"1")){
                             startActivity(intent1);
                         }
-                        //if(TextUtils.equals(activity,"2")){
-                        //    startActivity(intent2);
-                        //}
-                        if(TextUtils.equals(activity,"3")){
-                            startActivity(intent3);
+                        if(TextUtils.equals(activity,"2")){
+                            startActivity(intent2);
                         }
+                       // if(TextUtils.equals(activity,"3")){
+                        //    startActivity(intent3);
+                        //}
                         Log.i("SCANNER","name:"+device.getName()+" dir:"+device.getAddress());
                         saveBluetooth(device.getAddress(),device.getName());
                     }
@@ -273,7 +273,7 @@ public class EmparejarFragment extends BaseFragment{
         List<ScanFilter> filters = new ArrayList<>();
 
         ScanFilter filter = new ScanFilter.Builder()
-                .setServiceUuid(uuid)
+                //.setServiceUuid(uuid)
                 .build();
         filters.add(filter);
 
