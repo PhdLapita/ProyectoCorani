@@ -1,12 +1,17 @@
 package com.bearcreekmining.proyectocorani.actividades;
 
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,8 +34,10 @@ public class MainActivity extends BaseActivity
 
     @BindView(R.id.drawer_layout)DrawerLayout drawer;
     @BindView(R.id.nav_view)NavigationView navigationView;
-
+    private BluetoothAdapter mBluetoothAdapter;                                                      //Keep track of whether there is a scan in progress
     EmparejarFragment emparejarFragment;
+    private static final int REQUEST_ENABLE_BT = 1;                                                 //Constant to identify response from Activity that enables Bluetooth
+    private static final String TAG = "MainActivity";
     int fragment1;
     public static final String MyPREFERENCES = "MyPrefs" ;
     private SharedPreferences sharedPreferences;
@@ -59,8 +66,72 @@ public class MainActivity extends BaseActivity
     public void initView() {
         super.initView();
        initNavigationDrawer();
+        initBluetooth();
        initSharedPreferences();
         emparejarFragment=new EmparejarFragment();
+    }
+
+
+    public void enableDisableBT(){
+        if(mBluetoothAdapter == null){
+            Log.d(TAG, "enableDisableBT: Does not have BT capabilities.");
+        }
+        if(!mBluetoothAdapter.isEnabled()){
+            Log.d(TAG, "enableDisableBT: enabling BT.");
+            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivity(enableBTIntent);
+
+            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            registerReceiver(mBroadcastReceiver1, BTIntent);
+        }
+        if(mBluetoothAdapter.isEnabled()){
+            Log.d(TAG, "enableDisableBT: disabling BT.");
+            mBluetoothAdapter.disable();
+
+            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            registerReceiver(mBroadcastReceiver1, BTIntent);
+        }
+
+    }
+
+    private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            // When discovery finds a device
+            if (action.equals(mBluetoothAdapter.ACTION_STATE_CHANGED)) {
+                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, mBluetoothAdapter.ERROR);
+
+                switch(state){
+                    case BluetoothAdapter.STATE_OFF:
+                        Log.d(TAG, "onReceive: STATE OFF");
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_OFF:
+                        Log.d(TAG, "mBroadcastReceiver1: STATE TURNING OFF");
+                        break;
+                    case BluetoothAdapter.STATE_ON:
+                        Log.d(TAG, "mBroadcastReceiver1: ACABA DE PRENDER TODO XD");
+                        showFragment(emparejarFragment, R.id.fragment_emparejando);
+
+                        break;
+                    case BluetoothAdapter.STATE_TURNING_ON:
+                        Log.d(TAG, "mBroadcastReceiver1: STATE TURNING ON");
+                        break;
+                }
+            }
+        }
+    };
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "onDestroy: called.");
+        super.onDestroy();
+        unregisterReceiver(mBroadcastReceiver1);
+    }
+
+    public void initBluetooth(){
+        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);   //Get the BluetoothManager
+        mBluetoothAdapter = bluetoothManager.getAdapter();                                                          //Get a reference to the BluetoothAdapter (radio)
+        //mBluetoothAdapter.enable();
     }
 
     public void initNavigationDrawer(){
@@ -106,7 +177,9 @@ public class MainActivity extends BaseActivity
             if (emparejarFragment.isVisible()) {
                 deleteFragment(emparejarFragment);
             } else {
-                showFragment(emparejarFragment, R.id.fragment_emparejando);
+                //initBluetooth();
+                enableDisableBT();
+                //showFragment(emparejarFragment, R.id.fragment_emparejando);
                 saveBoton("2");
             }
         }

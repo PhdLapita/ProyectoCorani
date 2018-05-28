@@ -54,7 +54,9 @@ public class EmparejarFragment extends BaseFragment{
     public static final UUID uuid_blenano_xd = UUID.fromString("713D0000-503E-4C75-BA94-3148F18D941E");
     private final static String TAG = EmparejarFragment.class.getSimpleName();
     private BluetoothAdapter mBluetoothAdapter;                                                      //Keep track of whether there is a scan in progress
-    private Handler mHandler;                                                                       //Handler used to stop scanning after time delay
+    private Handler mHandler = new Handler();                                                                   //Create Handler to stop scanning
+    private Handler mHandler2 = new Handler();                                                                   //Create Handler to stop scanning
+    // Handler used to stop scanning after time delay
     private static final int REQUEST_ENABLE_BT = 1;                                                 //Constant to identify response from Activity that enables Bluetooth
     private static final long SCAN_PERIOD = 10000;
     private BluetoothAdapter.LeScanCallback mLeScanCallback;
@@ -65,7 +67,7 @@ public class EmparejarFragment extends BaseFragment{
     private ArrayAdapter<String> mLeDevicesListAdapter = null;
     private SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "MyPrefs" ;
-    private BluetoothLeScanner bluetoothLeScanner;
+    private BluetoothLeScanner bluetoothLeScanner = null;
     EmparejarFragmentInterface interfaceEmparejar;
 
     @OnClick(R.id.btn_fondo)public void clicFondo(){
@@ -90,7 +92,7 @@ public class EmparejarFragment extends BaseFragment{
         super.initViewFragment();
         Log.e("LOL","OMG7");
         initBluetooth();
-        permisosxD();
+        //permisosxD();
     }
 
     public void saveBluetooth(String mac,String name){
@@ -109,17 +111,14 @@ public class EmparejarFragment extends BaseFragment{
     // Activity launched
 
     protected void initBluetooth() {
-        mHandler = new Handler();                                                                   //Create Handler to stop scanning
         Log.e("LOL","OMG6");
 
         BluetoothManager bluetoothManager = (BluetoothManager) getActivity().getSystemService(Context.BLUETOOTH_SERVICE);   //Get the BluetoothManager
         mBluetoothAdapter = bluetoothManager.getAdapter();                                                          //Get a reference to the BluetoothAdapter (radio)
-
+        //mBluetoothAdapter.enable();
         //Instantiate LE devices list view, list and list adapter
         mLeDevicesList = new ArrayList();
         mLeDevicesListAdapter = new ArrayAdapter(getActivity(), R.layout.simple_list_item_devices, mLeDevicesList);
-
-
 
         if (lvDevices != null) {
             lvDevices.setAdapter(mLeDevicesListAdapter);                                   //Set adapter list view
@@ -267,7 +266,8 @@ public class EmparejarFragment extends BaseFragment{
                 Log.e("LOL",errorCode+"lol");
             }
         };
-        bluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+
+
 
         bluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
         List<ScanFilter> filters = new ArrayList<>();
@@ -291,7 +291,7 @@ public class EmparejarFragment extends BaseFragment{
             }}), SCAN_PERIOD);
 
 
-        bluetoothLeScanner.startScan(filters, settings, mCallback);
+        bluetoothLeScanner.startScan(mCallback);
         Log.e("LOL","scaneando");
         Log.i("LOL","scaneandoando");
 
