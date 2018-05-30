@@ -49,20 +49,20 @@ public class EmparejarFragment extends BaseFragment{
     @BindView(R.id.btn_buscar_devices)Button btnBuscarDevices;
     @BindView(R.id.btn_fondo)RelativeLayout btnFndo;
     @BindView(R.id.lvDevices)ListView lvDevices;
+    @BindView(R.id.txtTituloFragment)TextView txtTituloFragment;
     String address;
     public static final String uuid_blenano = "713D0000-503E-4C75-BA94-3148F18D941E";
     public static final UUID uuid_blenano_xd = UUID.fromString("713D0000-503E-4C75-BA94-3148F18D941E");
     private final static String TAG = EmparejarFragment.class.getSimpleName();
     private BluetoothAdapter mBluetoothAdapter;                                                      //Keep track of whether there is a scan in progress
     private Handler mHandler = new Handler();                                                                   //Create Handler to stop scanning
-    private Handler mHandler2 = new Handler();                                                                   //Create Handler to stop scanning
-    // Handler used to stop scanning after time delay
+     // Handler used to stop scanning after time delay
     private static final int REQUEST_ENABLE_BT = 1;                                                 //Constant to identify response from Activity that enables Bluetooth
     private static final long SCAN_PERIOD = 10000;
     private BluetoothAdapter.LeScanCallback mLeScanCallback;
     //private ScanCallback callback;
     private ScanCallback mCallback;
-
+    private String botonPresionado;
     private ArrayList mLeDevicesList = null;                                                        //List adapter to hold list of BLE devices from a scan
     private ArrayAdapter<String> mLeDevicesListAdapter = null;
     private SharedPreferences sharedpreferences;
@@ -75,13 +75,11 @@ public class EmparejarFragment extends BaseFragment{
     }
 
     @OnClick(R.id.btn_buscar_devices)public void clicBuscar(){
-
         stopScan();
         mLeDevicesListAdapter.clear();                                                      //Clear list of BLE devices found
         scanRefresh();
     }
-
-
+    
     @Override
     protected int getLayoutId() {
         return R.layout.emparejar_fragment;
@@ -91,8 +89,8 @@ public class EmparejarFragment extends BaseFragment{
     public void initViewFragment() {
         super.initViewFragment();
         Log.e("LOL","OMG7");
+        cargarDatos();
         initBluetooth();
-        //permisosxD();
     }
 
     public void saveBluetooth(String mac,String name){
@@ -102,6 +100,7 @@ public class EmparejarFragment extends BaseFragment{
         editor.putString("nombre",name);
         editor.commit();
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -109,6 +108,23 @@ public class EmparejarFragment extends BaseFragment{
     }
     // ----------------------------------------------------------------------------------------------------------------
     // Activity launched
+
+    public void cargarDatos() {
+        sharedpreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        botonPresionado = sharedpreferences.getString("numero", "");
+        if (TextUtils.equals(botonPresionado, "1")) {
+            txtTituloFragment.setText("Registrar Ropa");
+        }
+        if (TextUtils.equals(botonPresionado, "2")) {
+            txtTituloFragment.setText("Elegir Llavero");
+        }
+        if (TextUtils.equals(botonPresionado, "3")) {
+            txtTituloFragment.setText("Registrar Hiladora");
+        }
+        if (TextUtils.equals(botonPresionado, "4")) {
+            txtTituloFragment.setText("Registrar Máquina");
+        }
+    }
 
     protected void initBluetooth() {
         Log.e("LOL","OMG6");
@@ -141,13 +157,12 @@ public class EmparejarFragment extends BaseFragment{
                         //final Intent intent3 = new Intent(getActivity(), LlaveroActivity.class);     //Create Intent to start the DeviceControl
                         //intent.putExtra(EXTRAS_DEVICE_NAME, device.getName());        //Add BLE device name to the intent (for info, not needed)
                         //intent.putExtra(EXTRAS_DEVICE_ADDRESS, de vice.getAddress());  //Add BLE device address to the intent
-                        sharedpreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-                        String activity=sharedpreferences.getString("numero","");
-                        Log.e("LOL",activity);
-                        if(TextUtils.equals(activity,"1")){
+
+                        Log.e("LOL","El boton presionado en el navigationView es: "+botonPresionado);
+                        if(TextUtils.equals(botonPresionado,"1")){
                             startActivity(intent1);
                         }
-                        if(TextUtils.equals(activity,"2")){
+                        if(TextUtils.equals(botonPresionado,"2")){
                             startActivity(intent2);
                         }
                        // if(TextUtils.equals(activity,"3")){
@@ -158,35 +173,6 @@ public class EmparejarFragment extends BaseFragment{
                     }
                 }
             });
-        }
-    }
-
-
-    public void permisosxD(){
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED)
-        {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION))
-            {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            }
-            else
-            {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                        11);
-            }
         }
     }
 
@@ -267,8 +253,6 @@ public class EmparejarFragment extends BaseFragment{
             }
         };
 
-
-
         bluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
         List<ScanFilter> filters = new ArrayList<>();
 
@@ -346,9 +330,7 @@ public class EmparejarFragment extends BaseFragment{
             }
             mCallback=null;
         }
-
         else {
-
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
             mLeScanCallback=null;
         }

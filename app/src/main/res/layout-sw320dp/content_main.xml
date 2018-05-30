@@ -24,6 +24,7 @@
             android:textColor="#fff"
             android:layout_margin="4dp"
             android:id="@+id/btnMasInfo"
+            android:elevation="8dp"
             android:text="Mas información"
             android:layout_alignParentBottom="true"
             android:background="@drawable/btn_fragment"

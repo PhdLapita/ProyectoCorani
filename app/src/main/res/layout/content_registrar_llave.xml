@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".actividades.RegistrarLLaveActivity"
+    tools:showIn="@layout/activity_registrar_llave">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/etDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:hint="Descripción de la llave"/>
+
+            <ImageButton
+                android:id="@+id/ibRegistrarImagen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/btn_rectangular_redondo"
+                android:src="@mipmap/ic_elegir_imagen"
+                android:elevation="8dp"
+                android:layout_below="@+id/etDescripcion"
+                />
+
+            <Button
+                android:id="@+id/btnRegistrarBluetooth"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="16dp"
+                android:text="Elegir LLave"
+                android:textSize="16sp"
+                android:textColor="#fff"
+                android:elevation="8dp"
+                android:background="@drawable/btn_fragment"
+                android:layout_below="@+id/ibRegistrarImagen"
+                />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fragment_emparejando"
+            android:visibility="visible"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>

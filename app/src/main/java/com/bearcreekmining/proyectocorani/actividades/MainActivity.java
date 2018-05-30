@@ -30,11 +30,10 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener,EmparejarFragmentInterface {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.drawer_layout)DrawerLayout drawer;
     @BindView(R.id.nav_view)NavigationView navigationView;
-    private BluetoothAdapter mBluetoothAdapter;                                                      //Keep track of whether there is a scan in progress
     EmparejarFragment emparejarFragment;
     private static final int REQUEST_ENABLE_BT = 1;                                                 //Constant to identify response from Activity that enables Bluetooth
     private static final String TAG = "MainActivity";
@@ -54,7 +53,7 @@ public class MainActivity extends BaseActivity
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("numero", dato);
-        editor.commit();
+        editor.apply();
     }
 
     @Override
@@ -65,73 +64,10 @@ public class MainActivity extends BaseActivity
     @Override
     public void initView() {
         super.initView();
-       initNavigationDrawer();
-        initBluetooth();
-       initSharedPreferences();
+        initNavigationDrawer();
+        //initBluetooth();
+        initSharedPreferences();
         emparejarFragment=new EmparejarFragment();
-    }
-
-
-    public void enableDisableBT(){
-        if(mBluetoothAdapter == null){
-            Log.d(TAG, "enableDisableBT: Does not have BT capabilities.");
-        }
-        if(!mBluetoothAdapter.isEnabled()){
-            Log.d(TAG, "enableDisableBT: enabling BT.");
-            Intent enableBTIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivity(enableBTIntent);
-
-            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            registerReceiver(mBroadcastReceiver1, BTIntent);
-        }
-        if(mBluetoothAdapter.isEnabled()){
-            Log.d(TAG, "enableDisableBT: disabling BT.");
-            mBluetoothAdapter.disable();
-
-            IntentFilter BTIntent = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            registerReceiver(mBroadcastReceiver1, BTIntent);
-        }
-
-    }
-
-    private final BroadcastReceiver mBroadcastReceiver1 = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            // When discovery finds a device
-            if (action.equals(mBluetoothAdapter.ACTION_STATE_CHANGED)) {
-                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, mBluetoothAdapter.ERROR);
-
-                switch(state){
-                    case BluetoothAdapter.STATE_OFF:
-                        Log.d(TAG, "onReceive: STATE OFF");
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_OFF:
-                        Log.d(TAG, "mBroadcastReceiver1: STATE TURNING OFF");
-                        break;
-                    case BluetoothAdapter.STATE_ON:
-                        Log.d(TAG, "mBroadcastReceiver1: ACABA DE PRENDER TODO XD");
-                        showFragment(emparejarFragment, R.id.fragment_emparejando);
-
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_ON:
-                        Log.d(TAG, "mBroadcastReceiver1: STATE TURNING ON");
-                        break;
-                }
-            }
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy: called.");
-        super.onDestroy();
-        unregisterReceiver(mBroadcastReceiver1);
-    }
-
-    public void initBluetooth(){
-        BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);   //Get the BluetoothManager
-        mBluetoothAdapter = bluetoothManager.getAdapter();                                                          //Get a reference to the BluetoothAdapter (radio)
-        //mBluetoothAdapter.enable();
     }
 
     public void initNavigationDrawer(){
@@ -144,7 +80,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -166,37 +101,39 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_polo) {
-            /*if (emparejarFragment.isVisible()) {
+            if (emparejarFragment.isVisible()) {
                 deleteFragment(emparejarFragment);
             } else {
-                showFragment(emparejarFragment, R.id.fragment_emparejando);
+                //showFragment(emparejarFragment, R.id.fragment_emparejando);
                 saveBoton("1");
-            }*/
-            // Handle the camera action
+                //enableDisableBT();
+            }
         } else if (id == R.id.nav_llave) {
             if (emparejarFragment.isVisible()) {
                 deleteFragment(emparejarFragment);
             } else {
-                //initBluetooth();
-                enableDisableBT();
-                //showFragment(emparejarFragment, R.id.fragment_emparejando);
                 saveBoton("2");
+                irHacia(RegistrarLLaveActivity.class);
+                //enableDisableBT();
             }
         }
          else if (id == R.id.nav_hiladora) {
-
+            if (emparejarFragment.isVisible()) {
+                deleteFragment(emparejarFragment);
+            } else {
+                saveBoton("3");
+                //enableDisableBT();
+            }
         } else if (id == R.id.nav_calidad) {
-
+            if (emparejarFragment.isVisible()) {
+                deleteFragment(emparejarFragment);
+            } else {
+                saveBoton("4");
+                //enableDisableBT();
+            }
         }
-
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-    @Override
-    public void clicFondo() {
-
-        deleteFragment(emparejarFragment);
     }
 
 }

@@ -24,6 +24,7 @@
             android:textColor="#fff"
             android:textSize="8sp"
             android:layout_margin="4dp"
+            android:elevation="8dp"
             android:id="@+id/btnMasInfo"
             android:text="Mas información"
             android:layout_alignParentBottom="true"

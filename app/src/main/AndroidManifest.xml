@@ -4,11 +4,13 @@
     package="com.bearcreekmining.proyectocorani">
 
     <uses-feature android:name="android.hardware.bluetooth" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED"
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH_PRIVILEGED"
         tools:ignore="ProtectedPermissions" />
 
     <uses-feature
@@ -43,16 +45,23 @@
         <activity
             android:name=".actividades.SensoresActivity"
             android:label="@string/title_activity_sensores"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <service
             android:name=".Servicios.BleService"
             android:enabled="true" />
-
         <activity
             android:name=".actividades.RadarActivity"
             android:label="@string/title_activity_radar"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".actividades.MisLlavesActivity"
+            android:label="@string/title_activity_mis_llaves"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".actividades.RegistrarLLaveActivity"
+            android:label="@string/title_activity_registrar_llave"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

@@ -23,6 +23,7 @@
             android:layout_height="50dp"
             android:textColor="#fff"
             android:layout_margin="4dp"
+            android:elevation="8dp"
             android:id="@+id/btnMasInfo"
             android:textSize="24sp"
             android:text="Mas información"

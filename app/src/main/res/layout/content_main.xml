@@ -7,12 +7,12 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.bearcreekmining.proyectocorani.actividades.MainActivity"
     tools:showIn="@layout/app_bar_main">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/img_fondo_alpacas"
         >
-
         <ImageView
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -23,6 +23,7 @@
             android:layout_height="50dp"
             android:textColor="#fff"
             android:layout_margin="4dp"
+            android:elevation="8dp"
             android:id="@+id/btnMasInfo"
             android:text="Mas información"
             android:layout_alignParentBottom="true"

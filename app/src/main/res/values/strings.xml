@@ -9,6 +9,8 @@
     <string name="title_activity_llavero">LlaveroActivity</string>
     <string name="title_activity_sensores">SensoresActivity</string>
     <string name="title_activity_radar">RadarActivity</string>
+    <string name="title_activity_mis_llaves">MisLlavesActivity</string>
+    <string name="title_activity_registrar_llave">Registrar Llave</string>
 
     <!---->
 
