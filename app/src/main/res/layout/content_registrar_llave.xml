@@ -21,6 +21,10 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textSize="16sp"
+                android:inputType="text"
+                android:singleLine="true"
+                android:maxLines="1"
+                android:descendantFocusability="beforeDescendants"
                 android:hint="Descripción de la llave"/>
 
             <ImageButton

@@ -7,7 +7,7 @@ import android.arch.persistence.room.PrimaryKey;
 @Entity(tableName = LlaveEntidad.TABLE_NAME)
 public class LlaveEntidad {
 
-    /** The name of the Cheese table. */
+    /** The name of the Llave table. */
     public static final String TABLE_NAME = "mis_llaves";
 
     @PrimaryKey(autoGenerate = true)
@@ -63,5 +63,16 @@ public class LlaveEntidad {
 
     public void setBleUuid(String bleUuid) {
         this.bleUuid = bleUuid;
+    }
+
+    @Override
+    public String toString() {
+        return "LlaveEntidad{" +
+                "uid=" + uid +
+                ", descripcion='" + descripcion + '\'' +
+                ", imagen='" + imagen + '\'' +
+                ", nameBle='" + nameBle + '\'' +
+                ", bleUuid='" + bleUuid + '\'' +
+                '}';
     }
 }

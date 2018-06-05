@@ -16,32 +16,32 @@ public abstract class LlavesDataBase extends RoomDatabase{
      */
     public abstract LlaveDao llaveDao();
     /** The only instance */
-    private static LlavesDataBase sInstance;
+   // private static LlavesDataBase sInstance;
     /**
      * Gets the singleton instance of LlavesDataBase.
      *
      * @param context The context.
      * @return The singleton instance of LlavesDataBase.
      */
-    public static synchronized LlavesDataBase getInstance(Context context) {
+    /*public static synchronized LlavesDataBase getInstance(Context context) {
         if (sInstance == null) {
             sInstance = Room
-                    .databaseBuilder(context.getApplicationContext(), LlavesDataBase.class, "llave-database")
+                    .databaseBuilder(context.getApplicationContext(), LlavesDataBase.class, "llaves.db")
                     .build();
             //sInstance.populateInitialData();
         }
         return sInstance;
-    }
+    }*/
 
     /**
      * Switches the internal implementation with an empty in-memory database.
      *
      * @param context The context.
      */
-    @VisibleForTesting
+  /*  @VisibleForTesting
     public static void switchToInMemory(Context context) {
         sInstance = Room.inMemoryDatabaseBuilder(context.getApplicationContext(),
                 LlavesDataBase.class).build();
-    }
+    }*/
 
 }

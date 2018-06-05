@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.bearcreekmining.proyectocorani.db.entidades.LlaveEntidad;
 
@@ -14,17 +15,20 @@ import java.util.List;
 public interface LlaveDao {
     @Query("SELECT * FROM mis_llaves")
     List<LlaveEntidad> getAll();
-
+/*
     @Query("SELECT * FROM mis_llaves WHERE uid IN (:llaveEntidadIds)")
     List<LlaveEntidad> loadAllByIds(int[] llaveEntidadIds);
-
-    @Query("SELECT * FROM mis_llaves WHERE descripcion LIKE :first AND "
-            +"ble_uuid LIKE :last LIMIT 1")
-    LlaveEntidad findByName(String first ,String last);
+*/
+    @Query("SELECT * FROM mis_llaves WHERE descripcion LIKE :llave LIMIT 1")
+    LlaveEntidad findByName(String llave);
 
     @Insert
-    void insertAll(LlaveEntidad... llaveEntidads);
+    void insertAll(List<LlaveEntidad> llaveEntidads);
 
     @Delete
     void delete(LlaveEntidad llaveEntidad);
+
+    @Update
+    void update(LlaveEntidad llaveEntidad);
+
 }

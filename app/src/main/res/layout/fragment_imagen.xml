@@ -13,12 +13,12 @@
 
         <RelativeLayout
             android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
-            android:background="@drawable/btn_rectangular_redondo"
+            android:background="@drawable/btn_rectangular_redonde_custom"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true">
 

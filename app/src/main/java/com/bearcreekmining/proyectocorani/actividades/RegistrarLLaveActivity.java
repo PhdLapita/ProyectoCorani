@@ -6,19 +6,30 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
+import com.bearcreekmining.proyectocorani.App;
 import com.bearcreekmining.proyectocorani.R;
+import com.bearcreekmining.proyectocorani.adapter.AdapterImagenInterface;
+import com.bearcreekmining.proyectocorani.db.entidades.LlaveEntidad;
 import com.bearcreekmining.proyectocorani.fragmentos.ElegirImagenFragment;
 import com.bearcreekmining.proyectocorani.fragmentos.ElegirImagenFragmentInterface;
 import com.bearcreekmining.proyectocorani.fragmentos.EmparejarFragment;
 import com.bearcreekmining.proyectocorani.fragmentos.EmparejarFragmentInterface;
+import com.bearcreekmining.proyectocorani.model.imagenModel;
+import com.bearcreekmining.proyectocorani.utils.Constantes;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,16 +37,44 @@ import butterknife.OnTextChanged;
 
 public class RegistrarLLaveActivity extends BaseActivity implements EmparejarFragmentInterface, ElegirImagenFragmentInterface {
     private static final String TAG = "RegistrarLLaveActivity";
+    @BindView(R.id.btnRegistrarBluetooth)Button btnRegistrarBluetooth;
     @BindView(R.id.fab)FloatingActionButton fab;
     @BindView(R.id.etDescripcion)EditText etDescripcion;
-
+    @BindView(R.id.ibRegistrarImagen)ImageButton ibRegistrarImagen;
+    private int hayDescripcion,hayImagen,hayBluetooth;
     private ElegirImagenFragment elegirImagenFragment;
-
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    private SharedPreferences sharedPreferences;
     private BluetoothAdapter mBluetoothAdapter;    //adaptador que me permitira conocer el estado de mi bluettoh
     private EmparejarFragment emparejarFragment;    //creo una instancia de la clase EmparejarFragment
+    int imagenElegida;
+    String direccionBluettothElegido,nombreBluetoothElegido,descripcion;
+    //List<Integer> listImagenes ;
+    Constantes constantes= new Constantes();
 
     @OnClick(R.id.fab)public void clicBotonFlotante() {
-        irHacia(MisLlavesActivity.class);
+        getData();
+        final List<LlaveEntidad> listaDeLlaves = new ArrayList<>();
+        LlaveEntidad llaveEntidad = new LlaveEntidad();
+        llaveEntidad.setBleUuid(direccionBluettothElegido);
+        llaveEntidad.setImagen(String.valueOf(imagenElegida));
+        llaveEntidad.setDescripcion(descripcion);
+        llaveEntidad.setNameBle(nombreBluetoothElegido);
+        listaDeLlaves.add(llaveEntidad);
+
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                App.get().getDB().llaveDao().insertAll(listaDeLlaves);
+                List<LlaveEntidad> imprimirLlaves = App.get().getDB().llaveDao().getAll();
+                for(int i=0;i<imprimirLlaves.size();i++){
+                    Log.d("BASEDEDATOS", imprimirLlaves.get(i).toString());
+                }
+                //Log.d("IMPRIMIEDOXD", String.valueOf(imprimirLlaves.get(imprimirLlaves.indexOf(1))));
+            }
+        }).start();
+
+        //irHacia(MisLlavesActivity.class);
     }
 
     @OnClick(R.id.btnRegistrarBluetooth)public void clicElegirBle(){
@@ -51,15 +90,28 @@ public class RegistrarLLaveActivity extends BaseActivity implements EmparejarFra
     }
 
     @OnTextChanged(R.id.etDescripcion)protected void onTextChanged(CharSequence text) {
-        String featureName = text.toString();
+         descripcion = text.toString();
         //Log.i(TAG, "feature name:" + featureName);
-        if(featureName.isEmpty()){
-            fab.setEnabled(false);
-            fab.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+        if(descripcion.isEmpty()){
+            hayDescripcion=0;
             }else {
-            fab.setEnabled(true);
-            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+            hayDescripcion=1;
+            areYouReady();
         }
+    }
+
+    public void getData(){
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        imagenElegida = sharedPreferences.getInt("iamgenNumber", 0);
+        Log.d(TAG, String.valueOf(imagenElegida));
+        direccionBluettothElegido = sharedPreferences.getString("direccion", "");
+        Log.d(TAG, direccionBluettothElegido);
+        nombreBluetoothElegido = sharedPreferences.getString("nombre", "");
+        Log.d(TAG,nombreBluetoothElegido);
+    }
+
+    public void initSharedPreferences(){
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
     }
 
     @Override
@@ -73,6 +125,7 @@ public class RegistrarLLaveActivity extends BaseActivity implements EmparejarFra
         initBluetooth();            //obtengo el bluetoothAdapter para cuando lo use en el clicElegirBle()
         initFragment();             //inicio los fragments
         initInterface();
+        initSharedPreferences();
     }
 
     public void initFragment(){
@@ -153,7 +206,34 @@ public class RegistrarLLaveActivity extends BaseActivity implements EmparejarFra
     }
 
     @Override
+    public void verificarHayBluetooth() {
+        hayBluetooth=1;
+        getData();
+        btnRegistrarBluetooth.setText(nombreBluetoothElegido);
+        areYouReady();
+
+    }
+
+    @Override
     public void clicFondoxD() {
         deleteFragment(elegirImagenFragment);
     }
+
+    @Override
+    public void verificarHayImagen() {
+        hayImagen=1;
+        getData();
+        ibRegistrarImagen.setImageResource(Constantes.listImagenes.get(imagenElegida));//jalo de mis constantes la imagen para mostrar en el boton
+        areYouReady();
+    }
+/**
+ * Pregunto si ya las 3 opciones de elegir imagen, elegir llave y poner descripción fueron seteados por el usuario**/
+    public void areYouReady(){
+        if(hayBluetooth == 1 && hayDescripcion == 1 && hayImagen == 1){
+            fab.setEnabled(true);
+            fab.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+        }
+    }
+
+
 }

@@ -6,4 +6,5 @@ package com.bearcreekmining.proyectocorani.fragmentos;
 
 public interface EmparejarFragmentInterface {
         void clicFondo();
+        void verificarHayBluetooth();
 }
